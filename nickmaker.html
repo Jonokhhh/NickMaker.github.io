@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NickGen - Генератор крутых никнеймов для Telegram</title>
+    <meta name="description" content="Бесплатный генератор уникальных никнеймов для Telegram. Создай крутой ник за секунду!">
+    <meta name="theme-color" content="#667eea">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Сброс стилей и базовые настройки */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        /* Основной контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        /* Шапка */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        header .logo {
+            font-size: 3rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Основное содержимое */
+        main {
+            padding: 30px;
+        }
+
+        /* Панель управления */
+        .controls-panel {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            color: #495057;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-group label i {
+            color: #667eea;
+        }
+
+        select, input {
+            padding: 14px 18px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        /* Кнопки */
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 16px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(56, 161, 105, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(246, 173, 85, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(229, 62, 62, 0.4);
+        }
+
+        /* Результаты */
+        .results-section {
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .nicknames-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            min-height: 200px;
+        }
+
+        .nickname-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nickname-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .nickname-card.favorite::after {
+            content: '★';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            color: #f6ad55;
+            font-size: 14px;
+        }
+
+        /* Избранное */
+        .favorites-section {
+            margin-top: 40px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .favorites-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            min-height: 80px;
+        }
+
+        .favorite-item {
+            background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .remove-fav {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px 8px;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .remove-fav:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Статистика */
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: #f1f3f5;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #38a169;
+            color: white;
+            padding: 18px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateX(150%);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+            max-width: 350px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+        }
+
+        /* Подвал */
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #f8f9fa;
+            color: #6c757d;
+            margin-top: 40px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .social-link {
+            color: #667eea;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nicknames-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .buttons-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .notification {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 20px 15px;
+            }
+            
+            .nicknames-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Стили для темной темы */
+        .dark-mode {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+        }
+
+        .dark-mode .container {
+            background: rgba(45, 55, 72, 0.98);
+        }
+
+        .dark-mode .controls-panel,
+        .dark-mode .favorites-section {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        .dark-mode .nickname-card {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        .dark-mode select,
+        .dark-mode input {
+            background: #4a5568;
+            border-color: #718096;
+            color: #e2e8f0;
+        }
+
+        .dark-mode footer {
+            background: #2d3748;
+            color: #a0aec0;
+        }
+
+        .dark-mode .section-title {
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Шапка -->
+        <header>
+            <h1><i class="fas fa-robot logo"></i> NickGen <span style="font-size: 1.5rem;">- Генератор крутых ников для Telegram</span></h1>
+            <p>Создавайте уникальные, стильные и запоминающиеся никнеймы для Telegram, игр и социальных сетей</p>
+        </header>
+
+        <!-- Основное содержимое -->
+        <main>
+            <!-- Панель управления -->
+            <div class="controls-panel">
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <label for="category"><i class="fas fa-tags"></i> Категория:</label>
+                        <select id="category">
+                            <option value="all">🎲 Все категории</option>
+                            <option value="gaming">🎮 Игровые</option>
+                            <option value="anime">🌸 Аниме</option>
+                            <option value="tech">💻 Технологии</option>
+                            <option value="nature">🌿 Природа</option>
+                            <option value="fantasy">🐉 Фэнтези</option>
+                            <option value="cool">😎 Крутые</option>
+                            <option value="funny">😂 Смешные</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="style"><i class="fas fa-paint-brush"></i> Стиль:</label>
+                        <select id="style">
+                            <option value="normal">📝 Обычный</option>
+                            <option value="fancy">✨ Стильный (с символами)</option>
+                            <option value="weird">🌀 Необычный</option>
+                            <option value="professional">👔 Профессиональный</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="length"><i class="fas fa-ruler"></i> Длина:</label>
+                        <select id="length">
+                            <option value="short">🔤 Короткие (3-8 симв.)</option>
+                            <option value="medium" selected>📏 Средние (9-15 симв.)</option>
+                            <option value="long">📜 Длинные (16-25 симв.)</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="count"><i class="fas fa-hashtag"></i> Количество:</label>
+                        <input type="number" id="count" min="1" max="50" value="12">
+                    </div>
+                </div>
+
+                <div class="buttons-grid">
+                    <button class="btn btn-primary" id="generateBtn">
+                        <i class="fas fa-bolt"></i> Сгенерировать ники
+                    </button>
+                    <button class="btn btn-success" id="copyAllBtn">
+                        <i class="far fa-copy"></i> Копировать все
+                    </button>
+                    <button class="btn btn-warning" id="saveFavBtn">
+                        <i class="far fa-star"></i> Сохранить в избранное
+                    </button>
+                    <button class="btn btn-danger" id="clearBtn">
+                        <i class="fas fa-trash"></i> Очистить всё
+                    </button>
+                </div>
+            </div>
+
+            <!-- Результаты -->
+            <div class="results-section">
+                <h2 class="section-title"><i class="fas fa-bolt"></i> Сгенерированные никнеймы</h2>
+                <div class="nicknames-grid" id="nicknamesGrid">
+                    <!-- Никнеймы появятся здесь -->
+                </div>
+            </div>
+
+            <!-- Избранное -->
+            <div class="favorites-section" id="favoritesSection">
+                <h2 class="section-title"><i class="fas fa-star"></i> Избранные никнеймы</h2>
+                <div class="favorites-grid" id="favoritesGrid">
+                    <!-- Избранные никнеймы появятся здесь -->
+                </div>
+                <p style="text-align: center; color: #6c757d; margin-top: 15px; font-size: 0.9rem;">
+                    <i class="fas fa-info-circle"></i> Нажмите дважды на никнейм, чтобы добавить/удалить из избранного
+                </p>
+            </div>
+
+            <!-- Статистика -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-number" id="statGenerated">0</span>
+                    <span class="stat-label">Сгенерировано</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="statFavorites">0</span>
+                    <span class="stat-label">В избранном</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="statCopied">0</span>
+                    <span class="stat-label">Скопировано</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="statToday">0</span>
+                    <span class="stat-label">Сегодня</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Подвал -->
+        <footer>
+            <p>© 2024 NickGen - Генератор никнеймов для Telegram</p>
+            <p>Все ники создаются автоматически. Сохранение в избранное работает даже после закрытия браузера.</p>
+            <div class="social-links">
+                <a href="#" class="social-link" title="Поделиться"><i class="fas fa-share-alt"></i></a>
+                <a href="#" class="social-link" title="Telegram"><i class="fab fa-telegram"></i></a>
+                <button class="social-link" id="themeToggle" title="Сменить тему">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="social-link" id="refreshBtn" title="Обновить">
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Уведомление -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle" id="notificationIcon"></i>
+        <span id="notificationText">Уведомление</span>
+    </div>
+
+    <script>
+        // База данных никнеймов
+        const nicknamesDB = {
+            gaming: [
+                "CyberWolf", "ShadowHunter", "DragonSlayer", "NeoBlade", "PhantomKiller",
+                "SteelTitan", "VortexGamer", "QuantumShot", "NightStalker", "BlazeMaster",
+                "SilentNinja", "IronFist", "StormRider", "DigitalGhost", "VoidWalker"
+            ],
+            anime: [
+                "NarutoKun", "SasukeUchiha", "GokuSSJ", "LuffyD", "ZeroTwo",
+                "Kirito", "AsukaLangley", "LeviAckerman", "Mikasa", "Tanjiro",
+                "Nezuko", "GojoSatoru", "ErenJaeger", "SailorMoon", "LightYagami"
+            ],
+            tech: [
+                "ByteMaster", "CodeNinja", "QuantumBit", "NeuralNet", "CyberPunk",
+                "AI_Overlord", "DataMiner", "CloudWalker", "BinaryGhost", "TechSavvy",
+                "PixelWizard", "LogicBender", "SyntaxError", "DebugMaster", "API_Knight"
+            ],
+            nature: [
+                "ForestSpirit", "MountainKing", "OceanWave", "StormCloud", "SunFlower",
+                "MoonLight", "StarDust", "FireFly", "ThunderBird", "IceBerg",
+                "DesertWind", "RiverStone", "AutumnLeaf", "WinterSnow", "SpringBlossom"
+            ],
+            fantasy: [
+                "DragonLord", "ElfQueen", "WizardKing", "PhoenixFire", "UnicornDream",
+                "ShadowMage", "CrystalKnight", "MoonElf", "StarSorcerer", "TimeTraveler",
+                "MysticWolf", "AncientOne", "SpiritGuard", "DreamWeaver", "MagicBlade"
+            ],
+            cool: [
+                "AlphaWolf", "DarkKnight", "IceQueen", "SteelHeart", "Midnight",
+                "Viper", "Raven", "Orion", "Zenith", "Nova",
+                "Eclipse", "Phoenix", "Vortex", "Quantum", "Nebula"
+            ],
+            funny: [
+                "BananaMan", "PizzaLover", "CoffeeAddict", "SleepyCat", "KeyboardWarrior",
+                "SockThief", "ToastMaster", "NinjaTurtle", "DancingPotato", "Giggles",
+                "SirLoLALot", "CaptainObvious", "DoctorWhoops", "MajorDerp", "LordOfMemes"
+            ]
+        };
+
+        // Символы для оформления
+        const symbols = {
+            fancy: ["★", "✪", "♛", "♚", "✦", "❖", "⌬", "⍟", "⎈", "⚡", "☯", "♫", "∞"],
+            weird: ["∆", "¶", "§", "µ", "π", "Σ", "Ω", "λ", "φ", "ψ", "∂", "∫", "√"]
+        };
+
+        class NicknameGenerator {
+            constructor() {
+                this.stats = JSON.parse(localStorage.getItem('nickgen_stats')) || {
+                    generated: 0,
+                    copied: 0,
+                    favorites: 0,
+                    today: 0,
+                    lastDate: new Date().toDateString()
+                };
+                
+                // Обновляем счетчик "сегодня"
+                const today = new Date().toDateString();
+                if (this.stats.lastDate !== today) {
+                    this.stats.today = 0;
+                    this.stats.lastDate = today;
+                }
+                
+                this.favorites = JSON.parse(localStorage.getItem('nickgen_favorites')) || [];
+                this.currentNicknames = [];
+                
+                this.init();
+                this.updateStats();
+            }
+
+            init() {
+                // Инициализация DOM элементов
+                this.elements = {
+                    generateBtn: document.getElementById('generateBtn'),
+                    copyAllBtn: document.getElementById('copyAllBtn'),
+                    saveFavBtn: document.getElementById('saveFavBtn'),
+                    clearBtn: document.getElementById('clearBtn'),
+                    nicknamesGrid: document.getElementById('nicknamesGrid'),
+                    favoritesGrid: document.getElementById('favoritesGrid'),
+                    favoritesSection: document.getElementById('favoritesSection'),
+                    notification: document.getElementById('notification'),
+                    notificationText: document.getElementById('notificationText'),
+                    notificationIcon: document.getElementById('notificationIcon'),
+                    themeToggle: document.getElementById('themeToggle'),
+                    refreshBtn: document.getElementById('refreshBtn'),
+                    // Статистика
+                    statGenerated: document.getElementById('statGenerated'),
+                    statFavorites: document.getElementById('statFavorites'),
+                    statCopied: document.getElementById('statCopied'),
+                    statToday: document.getElementById('statToday')
+                };
+
+                // Настройка событий
+                this.setupEventListeners();
+                
+                // Загрузка избранного
+                this.loadFavorites();
+                
+                // Генерация начальных никнеймов
+                this.generateNicknames();
+                
+                // Проверка темы
+                this.checkTheme();
+            }
+
+            setupEventListeners() {
+                this.elements.generateBtn.addEventListener('click', () => this.generateNicknames());
+                this.elements.copyAllBtn.addEventListener('click', () => this.copyAllNicknames());
+                this.elements.saveFavBtn.addEventListener('click', () => this.saveSelectedToFavorites());
+                this.elements.clearBtn.addEventListener('click', () => this.clearAll());
+                this.elements.themeToggle.addEventListener('click', () => this.toggleTheme());
+                this.elements.refreshBtn.addEventListener('click', () => location.reload());
+                
+                // Кнопка для мобильных - виброотклик
+                if ('vibrate' in navigator) {
+                    const buttons = document.querySelectorAll('.btn, .nickname-card');
+                    buttons.forEach(btn => {
+                        btn.addEventListener('touchstart', () => {
+                            navigator.vibrate(50);
+                        });
+                    });
+                }
+            }
+
+            generateNicknames() {
+                const category = document.getElementById('category').value;
+                const style = document.getElementById('style').value;
+                const length = document.getElementById('length').value;
+                const count = Math.min(50, Math.max(1, parseInt(document.getElementById('count').value) || 12));
+                
+                this.currentNicknames = [];
+                this.elements.nicknamesGrid.innerHTML = '';
+                
+                // Определяем категории
+                const categories = category === 'all' ? Object.keys(nicknamesDB) : [category];
+                
+                for (let i = 0; i < count; i++) {
+                    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+                    const baseNicknames = nicknamesDB[randomCategory] || nicknamesDB.gaming;
+                    let nickname = baseNicknames[Math.floor(Math.random() * baseNicknames.length)];
+                    
+                    // Применяем стиль
+                    nickname = this.applyStyle(nickname, style);
+                    
+                    // Применяем длину
+                    nickname = this.applyLength(nickname, length);
+                    
+                    // Добавляем уникальный номер если нужно
+                    if (Math.random() > 0.7 && nickname.length < 20) {
+                        nickname += Math.floor(Math.random() * 99);
+                    }
+                    
+                    this.currentNicknames.push(nickname);
+                    
+                    // Создаем карточку никнейма
+                    const card = this.createNicknameCard(nickname);
+                    this.elements.nicknamesGrid.appendChild(card);
+                }
+                
+                // Обновляем статистику
+                this.stats.generated += count;
+                this.stats.today += count;
+                this.updateStats();
+                this.saveStats();
+                
+                this.showNotification(`Сгенерировано ${count} никнеймов!`, 'success');
+                
+                // Анимация появления
+                const cards = document.querySelectorAll('.nickname-card');
+                cards.forEach((card, index) => {
+                    card.style.animationDelay = `${index * 0.05}s`;
+                    card.classList.add('fade-in');
+                });
+            }
+
+            applyStyle(nickname, style) {
+                switch(style) {
+                    case 'fancy':
+                        const symbol = symbols.fancy[Math.floor(Math.random() * symbols.fancy.length)];
+                        return Math.random() > 0.5 ? `${symbol} ${nickname}` : `${nickname} ${symbol}`;
+                    case 'weird':
+                        const weirdSymbol = symbols.weird[Math.floor(Math.random() * symbols.weird.length)];
+                        return `${weirdSymbol}${nickname}${weirdSymbol}`;
+                    case 'professional':
+                        const prefixes = ['Dr.', 'Prof.', 'Mr.', 'Ms.', 'Sir', 'Lady'];
+                        const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+                        return `${prefix} ${nickname}`;
+                    default:
+                        return nickname;
+                }
+            }
+
+            applyLength(nickname, lengthType) {
+                const limits = {
+                    short: { min: 3, max: 8 },
+                    medium: { min: 9, max: 15 },
+                    long: { min: 16, max: 25 }
+                };
+                
+                const limit = limits[lengthType] || limits.medium;
+                
+                // Если ник слишком короткий, добавляем символы
+                if (nickname.length < limit.min) {
+                    const extra = ['X', 'Z', 'Pro', 'Max', 'Ultra'];
+                    nickname += extra[Math.floor(Math.random() * extra.length)];
+                }
+                
+                // Если слишком длинный, обрезаем
+                if (nickname.length > limit.max) {
+                    nickname = nickname.substring(0, limit.max);
+                }
+                
+                return nickname;
+            }
+
+            createNicknameCard(nickname) {
+                const card = document.createElement('div');
+                card.className = 'nickname-card';
+                card.textContent = nickname;
+                card.dataset.nickname = nickname;
+                
+                // Проверяем избранное
+                if (this.favorites.includes(nickname)) {
+                    card.classList.add('favorite');
+                }
+                
+                // Обработка кликов
+                let clickTimer;
+                card.addEventListener('click', () => {
+                    clearTimeout(clickTimer);
+                    clickTimer = setTimeout(() => {
+                        this.copyNickname(nickname, card);
+                    }, 300);
+                });
+                
+                card.addEventListener('dblclick', (e) => {
+                    clearTimeout(clickTimer);
+                    e.preventDefault();
+                    this.toggleFavorite(nickname, card);
+                });
+                
+                // Для мобильных - долгое нажатие
+                let pressTimer;
+                card.addEventListener('touchstart', (e) => {
+                    pressTimer = setTimeout(() => {
+                        e.preventDefault();
+                        this.toggleFavorite(nickname, card);
+                    }, 500);
+                });
+                
+                card.addEventListener('touchend', () => {
+                    clearTimeout(pressTimer);
+                });
+                
+                return card;
+            }
+
+            copyNickname(nickname, element) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(nickname).then(() => {
+                        this.showNotification(`Скопировано: ${nickname}`, 'success');
+                        this.stats.copied++;
+                        this.updateStats();
+                        this.saveStats();
+                        
+                        // Анимация
+                        element.style.background = 'linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%)';
+                        setTimeout(() => {
+                            element.style.background = '';
+                        }, 500);
+                    }).catch(err => {
+                        this.showNotification('Ошибка при копировании', 'error');
+                    });
+                } else {
+                    // Fallback для старых браузеров
+                    const textArea = document.createElement('textarea');
+                    textArea.value = nickname;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    this.showNotification(`Скопировано: ${nickname}`, 'success');
+                }
+            }
+
+            copyAllNicknames() {
+                if (this.currentNicknames.length === 0) {
+                    this.showNotification('Сначала сгенерируйте никнеймы!', 'warning');
+                    return;
+                }
+                
+                const text = this.currentNicknames.join('\n');
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        this.showNotification(`Скопировано ${this.currentNicknames.length} никнеймов!`, 'success');
+                        this.stats.copied += this.currentNicknames.length;
+                        this.updateStats();
+                        this.saveStats();
+                    });
+                }
+            }
+
+            toggleFavorite(nickname, element) {
+                const index = this.favorites.indexOf(nickname);
+                
+                if (index === -1) {
+                    this.favorites.push(nickname);
+                    element.classList.add('favorite');
+                    this.showNotification(`Добавлено в избранное: ${nickname}`, 'info');
+                } else {
+                    this.favorites.splice(index, 1);
+                    element.classList.remove('favorite');
+                    this.showNotification(`Удалено из избранного: ${nickname}`, 'warning');
+                }
+                
+                this.saveFavorites();
+                this.loadFavorites();
+                this.updateStats();
+            }
+
+            saveSelectedToFavorites() {
+                const selected = document.querySelectorAll('.nickname-card.favorite');
+                let added = 0;
+                
+                selected.forEach(card => {
+                    const nickname = card.dataset.nickname;
+                    if (!this.favorites.includes(nickname)) {
+                        this.favorites.push(nickname);
+                        added++;
+                    }
+                });
+                
+                if (added > 0) {
+                    this.saveFavorites();
+                    this.loadFavorites();
+                    this.updateStats();
+                    this.showNotification(`Добавлено ${added} никнеймов в избранное`, 'success');
+                } else {
+                    this.showNotification('Все выбранные никнеймы уже в избранном', 'info');
+                }
+            }
+
+            saveFavorites() {
+                localStorage.setItem('nickgen_favorites', JSON.stringify(this.favorites));
+                this.stats.favorites = this.favorites.length;
+                this.saveStats();
+            }
+
+            loadFavorites() {
+                this.elements.favoritesGrid.innerHTML = '';
+                
+                if (this.favorites.length === 0) {
+                    this.elements.favoritesGrid.innerHTML = `
+                        <div style="text-align: center; width: 100%; color: #6c757d; padding: 20px;">
+                            <i class="far fa-star" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                            <p>Нет избранных никнеймов</p>
+                            <p style="font-size: 0.9rem;">Дважды нажмите на никнейм, чтобы добавить его сюда</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                this.favorites.forEach(nickname => {
+                    const favItem = document.createElement('div');
+                    favItem.className = 'favorite-item';
+                    favItem.innerHTML = `
+                        ${nickname}
+                        <button class="remove-fav" data-nickname="${nickname}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    
+                    favItem.querySelector('.remove-fav').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.removeFavorite(nickname);
+                    });
+                    
+                    this.elements.favoritesGrid.appendChild(favItem);
+                });
+            }
+
+            removeFavorite(nickname) {
+                const index = this.favorites.indexOf(nickname);
+                if (index !== -1) {
+                    this.favorites.splice(index, 1);
+                    this.saveFavorites();
+                    this.loadFavorites();
+                    
+                    // Обновляем карточки
+                    document.querySelectorAll('.nickname-card').forEach(card => {
+                        if (card.dataset.nickname === nickname) {
+                            card.classList.remove('favorite');
+                        }
+                    });
+                    
+                    this.showNotification(`Удалено из избранного: ${nickname}`, 'warning');
+                }
+            }
+
+            clearAll() {
+                if (confirm('Вы уверены, что хотите очистить все сгенерированные никнеймы?')) {
+                    this.currentNicknames = [];
+                    this.elements.nicknamesGrid.innerHTML = '';
+                    this.showNotification('Все никнеймы очищены', 'info');
+                }
+            }
+
+            updateStats() {
+                this.elements.statGenerated.textContent = this.stats.generated;
+                this.elements.statFavorites.textContent = this.favorites.length;
+                this.elements.statCopied.textContent = this.stats.copied;
+                this.elements.statToday.textContent = this.stats.today;
+            }
+
+            saveStats() {
+                localStorage.setItem('nickgen_stats', JSON.stringify(this.stats));
+            }
+
+            showNotification(message, type = 'info') {
+                const iconMap = {
+                    success: 'fa-check-circle',
+                    error: 'fa-exclamation-circle',
+                    warning: 'fa-exclamation-triangle',
+                    info: 'fa-info-circle'
+                };
+                
+                this.elements.notificationText.textContent = message;
+                this.elements.notificationIcon.className = `fas ${iconMap[type] || 'fa-info-circle'}`;
+                this.elements.notification.className = `notification show ${type}`;
+                
+                setTimeout(() => {
+                    this.elements.notification.classList.remove('show');
+                }, 3000);
+            }
+
+            toggleTheme() {
+                document.body.classList.toggle('dark-mode');
+                const icon = this.elements.themeToggle.querySelector('i');
+                
+                if (document.body.classList.contains('dark-mode')) {
+                    icon.className = 'fas fa-sun';
+                    localStorage.setItem('nickgen_theme', 'dark');
+                } else {
+                    icon.className = 'fas fa-moon';
+                    localStorage.setItem('nickgen_theme', 'light');
+                }
+            }
+
+            checkTheme() {
+                const savedTheme = localStorage.getItem('nickgen_theme') || 'light';
+                if (savedTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                    this.elements.themeToggle.querySelector('i').className = 'fas fa-sun';
+                }
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            // Задержка для анимации загрузки
+            setTimeout(() => {
+                window.nickGen = new NicknameGenerator();
+            }, 100);
+            
+            // Добавляем эффект загрузки
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 50);
+        });
+
+        // PWA функционал - добавление на главный экран
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+
+        // Функция для добавления на главный экран
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Показать кнопку установки через 10 секунд
+            setTimeout(() => {
+                if (deferredPrompt) {
+                    const installBtn = document.createElement('button');
+                    installBtn.innerHTML = '<i class="fas fa-download"></i> Установить приложение';
+                    installBtn.className = 'btn btn-success';
+                    installBtn.style.margin = '10px auto';
+                    installBtn.style.display = 'block';
+                    
+                    installBtn.addEventListener('click', () => {
+                        deferredPrompt.prompt();
+                        deferredPrompt.userChoice.then((choiceResult) => {
+                            if (choiceResult.outcome === 'accepted') {
+                                console.log('Пользователь установил PWA');
+                            }
+                            deferredPrompt = null;
+                        });
+                    });
+                    
+                    document.querySelector('.controls-panel').appendChild(installBtn);
+                }
+            }, 10000);
+        });
+    </script>
+</body>
+</html>
